@@ -41,6 +41,7 @@ class WeatherActivity : AppCompatActivity() {
     private lateinit var txtHumidityDetails: TextView
     private lateinit var txtTempDetails: TextView
     private lateinit var txtWeatherDetails: TextView
+    private lateinit var lbl_description :TextView
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val apiKey = "7df53ab1cb496bd0eed2ef64eddec83e"
 
@@ -67,6 +68,7 @@ class WeatherActivity : AppCompatActivity() {
         txtCelcius2 = findViewById(R.id.txt_celcius2)
         txtDescription = findViewById(R.id.txt_description)
         imgWeatherImg = findViewById(R.id.img_weatherImg)
+        lbl_description = findViewById(R.id.txt_des)
 
         // Initialize the additional TextView elements
         txtPressureDetails = findViewById(R.id.txt_pressureDetails)
@@ -205,6 +207,7 @@ class WeatherActivity : AppCompatActivity() {
                     } else {
                         ""
                     }
+                    lbl_description
                     val iconCode = if (weatherArray.length() > 0) {
                         weatherArray.getJSONObject(0).getString("icon")
                     } else {
@@ -265,6 +268,7 @@ class WeatherActivity : AppCompatActivity() {
                     } else {
                         ""
                     }
+
                     val iconCode = if (weatherArray.length() > 0) {
                         weatherArray.getJSONObject(0).getString("icon")
                     } else {
@@ -275,6 +279,7 @@ class WeatherActivity : AppCompatActivity() {
                     txtCountry.text = cityName
                     txtCelcius2.text = "${formattedTemperature}°C"
                     txtDescription.text = description.toUpperCase()
+                    lbl_description.text = description.toUpperCase()
 
                     // Display the additional weather details
                     txtPressureDetails.text = "$pressure hPa"
