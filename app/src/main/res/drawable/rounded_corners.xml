@@ -1,0 +1,5 @@
+<!-- rounded_corners.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="20dp" /> <!-- Adjust the radius as needed for the desired roundness -->
+    <solid android:color="#3CF1EBF1" /> <!-- Background color of the card -->
+</shape>
