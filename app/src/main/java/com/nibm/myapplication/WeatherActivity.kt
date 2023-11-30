@@ -42,6 +42,8 @@ class WeatherActivity : AppCompatActivity() {
     private lateinit var txtTempDetails: TextView
     private lateinit var txtWeatherDetails: TextView
     private lateinit var lbl_description :TextView
+    private lateinit var temp_max : TextView
+    private lateinit var temp_min : TextView
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val apiKey = "7df53ab1cb496bd0eed2ef64eddec83e"
 
@@ -69,6 +71,8 @@ class WeatherActivity : AppCompatActivity() {
         txtDescription = findViewById(R.id.txt_description)
         imgWeatherImg = findViewById(R.id.img_weatherImg)
         lbl_description = findViewById(R.id.txt_des)
+        temp_max = findViewById(R.id.temp_max)
+        temp_min = findViewById(R.id.temp_min)
 
         // Initialize the additional TextView elements
         txtPressureDetails = findViewById(R.id.txt_pressureDetails)
@@ -257,6 +261,16 @@ class WeatherActivity : AppCompatActivity() {
                 try {
                     // Extract weather information and update UI
                     val temperature = data.getJSONObject("main").getDouble("temp")
+                    val max_temperature = data.getJSONObject("main").getDouble("temp_max")
+                    val min_temperature = data.getJSONObject("main").getDouble("temp_min")
+
+                    val maxTempInCelsius = max_temperature - 273.15
+                    val formattedMaxTemperature = String.format("%.2f", maxTempInCelsius)
+
+                    val minTempInCelsius = min_temperature - 273.15
+                    val formattedMinTemperature = String.format("%.2f", minTempInCelsius)
+
+
                     val temperatureInCelsius = temperature - 273.15
                     val formattedTemperature = String.format("%.2f", temperatureInCelsius)
                     val pressure = data.getJSONObject("main").getDouble("pressure")
@@ -280,6 +294,9 @@ class WeatherActivity : AppCompatActivity() {
                     txtCelcius2.text = "${formattedTemperature}°C"
                     txtDescription.text = description.toUpperCase()
                     lbl_description.text = description.toUpperCase()
+
+                    temp_max.text = "${formattedMaxTemperature}°C"
+                    temp_min.text = "${formattedMinTemperature}°C"
 
                     // Display the additional weather details
                     txtPressureDetails.text = "$pressure hPa"
