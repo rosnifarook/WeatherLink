@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.view.MotionEvent
 import android.widget.EditText
@@ -15,6 +16,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.location.Geocoder
+import android.widget.ImageButton
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -47,6 +49,7 @@ class ForcastActivity : AppCompatActivity() {
     private lateinit var txtTemp2:TextView
     private lateinit var txtTemp3:TextView
     private lateinit var txtTemp4:TextView
+    private lateinit var btnBack : ImageButton
     private val apiKey = "7df53ab1cb496bd0eed2ef64eddec83e"
 
     companion object {
@@ -76,6 +79,7 @@ class ForcastActivity : AppCompatActivity() {
         txtTemp2 = findViewById(R.id.txtTemp2)
         txtTemp3 = findViewById(R.id.txtTemp3)
         txtTemp4 = findViewById(R.id.txtTemp4)
+        btnBack = findViewById(R.id.btnBack)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         searchBar = findViewById(R.id.search_bar)
@@ -104,6 +108,10 @@ class ForcastActivity : AppCompatActivity() {
             return
         }
         getCurrentLocation()
+
+        btnBack.setOnClickListener(){
+            startActivity(Intent(this,WeatherActivity::class.java))
+        }
     }
     private fun getCurrentLocation() {
         if (ContextCompat.checkSelfPermission(

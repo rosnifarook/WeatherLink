@@ -35,7 +35,7 @@ class WeatherActivity : AppCompatActivity() {
     private lateinit var txtDataAndTime: TextView
     private lateinit var txtCountry: TextView
     private lateinit var txtCelcius2: TextView
-    private lateinit var txtDescription: TextView
+//    private lateinit var txtDescription: TextView
     private lateinit var imgWeatherImg: ImageView
     private lateinit var txtPressureDetails: TextView
     private lateinit var txtHumidityDetails: TextView
@@ -44,6 +44,8 @@ class WeatherActivity : AppCompatActivity() {
     private lateinit var lbl_description :TextView
     private lateinit var temp_max : TextView
     private lateinit var temp_min : TextView
+    private lateinit var sea_level : TextView
+    private lateinit var grnd_level : TextView
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val apiKey = "7df53ab1cb496bd0eed2ef64eddec83e"
 
@@ -68,11 +70,13 @@ class WeatherActivity : AppCompatActivity() {
         txtDataAndTime = findViewById(R.id.txt_dataAndTime)
         txtCountry = findViewById(R.id.txt_country)
         txtCelcius2 = findViewById(R.id.txt_celcius2)
-        txtDescription = findViewById(R.id.txt_description)
+//        txtDescription = findViewById(R.id.txt_description)
         imgWeatherImg = findViewById(R.id.img_weatherImg)
         lbl_description = findViewById(R.id.txt_des)
         temp_max = findViewById(R.id.temp_max)
         temp_min = findViewById(R.id.temp_min)
+        sea_level = findViewById(R.id.sea_level)
+        grnd_level = findViewById(R.id.grnd_level)
 
         // Initialize the additional TextView elements
         txtPressureDetails = findViewById(R.id.txt_pressureDetails)
@@ -221,7 +225,7 @@ class WeatherActivity : AppCompatActivity() {
                     // Display the location name, temperature, and weather description
                     txtCountry.text = cityName
                     txtCelcius2.text = "${formattedTemperature}°C"
-                    txtDescription.text = description.toUpperCase()
+//                    txtDescription.text = description.toUpperCase()
 
                     // Display the additional weather details
                     txtPressureDetails.text = "$pressure hPa"
@@ -270,6 +274,9 @@ class WeatherActivity : AppCompatActivity() {
                     val minTempInCelsius = min_temperature - 273.15
                     val formattedMinTemperature = String.format("%.2f", minTempInCelsius)
 
+                    val sea_level1 = data.getJSONObject("main").getDouble("sea_level")
+                    val groud_level = data.getJSONObject("main").getDouble("grnd_level")
+
 
                     val temperatureInCelsius = temperature - 273.15
                     val formattedTemperature = String.format("%.2f", temperatureInCelsius)
@@ -292,11 +299,14 @@ class WeatherActivity : AppCompatActivity() {
                     // Display the location name, temperature, and weather description
                     txtCountry.text = cityName
                     txtCelcius2.text = "${formattedTemperature}°C"
-                    txtDescription.text = description.toUpperCase()
+//                    txtDescription.text = description.toUpperCase()
                     lbl_description.text = description.toUpperCase()
 
                     temp_max.text = "${formattedMaxTemperature}°C"
                     temp_min.text = "${formattedMinTemperature}°C"
+
+                    sea_level.text = "$sea_level1"
+                    grnd_level.text = "$groud_level"
 
                     // Display the additional weather details
                     txtPressureDetails.text = "$pressure hPa"
