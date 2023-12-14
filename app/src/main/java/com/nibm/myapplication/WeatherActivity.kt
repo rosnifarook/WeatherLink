@@ -6,6 +6,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
@@ -20,12 +21,14 @@ import com.google.android.gms.location.LocationServices
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.nibm.myapplication.AboutUsActivity
 import com.nibm.myapplication.R
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -35,7 +38,6 @@ class WeatherActivity : AppCompatActivity() {
     private lateinit var txtDataAndTime: TextView
     private lateinit var txtCountry: TextView
     private lateinit var txtCelcius2: TextView
-//    private lateinit var txtDescription: TextView
     private lateinit var imgWeatherImg: ImageView
     private lateinit var txtPressureDetails: TextView
     private lateinit var txtHumidityDetails: TextView
@@ -46,6 +48,7 @@ class WeatherActivity : AppCompatActivity() {
     private lateinit var temp_min : TextView
     private lateinit var sea_level : TextView
     private lateinit var grnd_level : TextView
+    private lateinit var btnAboutUs : Button
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val apiKey = "7df53ab1cb496bd0eed2ef64eddec83e"
 
@@ -53,7 +56,7 @@ class WeatherActivity : AppCompatActivity() {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
     }
 
-    @SuppressLint("ClickableViewAccessibility", "MissingInflatedId")
+    @SuppressLint("ClickableViewAccessibility", "MissingInflatedId", "WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weather_home)
@@ -77,6 +80,7 @@ class WeatherActivity : AppCompatActivity() {
         temp_min = findViewById(R.id.temp_min)
         sea_level = findViewById(R.id.sea_level)
         grnd_level = findViewById(R.id.grnd_level)
+        btnAboutUs = findViewById(R.id.btnAboutUs)
 
         // Initialize the additional TextView elements
         txtPressureDetails = findViewById(R.id.txt_pressureDetails)
@@ -101,12 +105,15 @@ class WeatherActivity : AppCompatActivity() {
             // Get the current location, temperature, weather description, and weather icon for the current location
             getCurrentLocation()
         }
-        // Assuming you are inside an Activity
 
+        // Set an OnClickListener for the button
+        btnAboutUs.setOnClickListener {
+            // Create an Intent to navigate to ForeCastDashBoard
+            val intent = Intent(this@WeatherActivity, AboutUsActivity::class.java)
 
-
-        // Set OnClickListener for the search button
-
+            // Start the ForeCastDashBoard activity
+            startActivity(intent)
+        }
 
         // Add the new code for handling the drawableRight click
         val searchBar = findViewById<EditText>(R.id.search_bar)
@@ -122,8 +129,6 @@ class WeatherActivity : AppCompatActivity() {
             }
             false
         }
-
-
     }
 
     private fun onSearchButtonClick() {
@@ -169,7 +174,11 @@ class WeatherActivity : AppCompatActivity() {
                     if (location != null) {
                         // Assuming you are inside an Activity
 // Get and display the current temperature, weather description, and weather icon
+
+                        val forecastCityName = getCityName(location.latitude, location.longitude)
+                        txtCountry .text = forecastCityName
                         getWeatherData(location.latitude, location.longitude)
+
                     } else {
                         // Assuming you are inside an Activity
 
@@ -223,7 +232,7 @@ class WeatherActivity : AppCompatActivity() {
                     }
 
                     // Display the location name, temperature, and weather description
-                    txtCountry.text = cityName
+                    //  txtCountry.text = cityName
                     txtCelcius2.text = "${formattedTemperature}°C"
 //                    txtDescription.text = description.toUpperCase()
 
@@ -343,5 +352,21 @@ class WeatherActivity : AppCompatActivity() {
 
         // Use Picasso library to load and display the weather icon
         Picasso.get().load(iconUrl).into(imgWeatherImg)
+    }
+
+    private fun getCityName(latitude: Double, longitude: Double): String {
+        val geocoder = Geocoder(this, Locale.getDefault())
+        try {
+            val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+            if (addresses != null) {
+                if (addresses.isNotEmpty()) {
+                    val cityName = addresses[0]?.locality
+                    return cityName ?: "Unknown"
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return "Unknown"
     }
 }
