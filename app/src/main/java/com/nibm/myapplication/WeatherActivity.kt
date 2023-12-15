@@ -11,6 +11,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -22,6 +23,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.nibm.myapplication.AboutUsActivity
+import com.nibm.myapplication.GoogleMapActivity
 import com.nibm.myapplication.R
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -49,6 +51,7 @@ class WeatherActivity : AppCompatActivity() {
     private lateinit var sea_level : TextView
     private lateinit var grnd_level : TextView
     private lateinit var btnAboutUs : Button
+    private lateinit var btnMap : ImageButton
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val apiKey = "7df53ab1cb496bd0eed2ef64eddec83e"
 
@@ -81,6 +84,7 @@ class WeatherActivity : AppCompatActivity() {
         sea_level = findViewById(R.id.sea_level)
         grnd_level = findViewById(R.id.grnd_level)
         btnAboutUs = findViewById(R.id.btnAboutUs)
+        btnMap = findViewById(R.id.btnMap)
 
         // Initialize the additional TextView elements
         txtPressureDetails = findViewById(R.id.txt_pressureDetails)
@@ -105,6 +109,16 @@ class WeatherActivity : AppCompatActivity() {
             // Get the current location, temperature, weather description, and weather icon for the current location
             getCurrentLocation()
         }
+
+        btnMap.setOnClickListener {
+            // Create an Intent to navigate to ForeCastDashBoard
+            val intent = Intent(this@WeatherActivity, GoogleMapActivity::class.java)
+
+            // Start the ForeCastDashBoard activity
+            startActivity(intent)
+        }
+
+
 
         // Set an OnClickListener for the button
         btnAboutUs.setOnClickListener {
